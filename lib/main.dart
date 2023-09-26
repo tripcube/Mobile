@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'controller/webview_controller.dart';
+import 'util/fcmSetting.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  String? firebaseToken = await fcmSetting();
 
   // 반응형 상태 관리 controller 등록
   Get.put(WebviewMainController());
@@ -23,12 +27,18 @@ class MyApp extends StatelessWidget {
     late final controller = WebviewMainController.to.getController();
 
     return MaterialApp(
+      theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
+          )
+      ),
       home: Scaffold(
         appBar: PreferredSize(
             //앱 바는 필요하지 않았기에 0으로
             preferredSize: const Size.fromHeight(0),
             // elevation = 필요하지 않은 그림자 효과
-            child: AppBar(elevation: 0)),
+            child: AppBar(elevation: 0, backgroundColor: Colors.white,)
+        ),
         //WebViewWidget에 controller를 parameter로 넘겨준다
         body: WebViewWidget(controller: controller),
       ),

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1024210215173",
+    "project_id": "tripcube-1fb82",
+    "storage_bucket": "tripcube-1fb82.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024210215173:android:4fefd464f5dcadd57f976c",
+        "android_client_info": {
+          "package_name": "com.example.tripcube"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe8ziSR6sAZ78p2YJv24yQbG1iVfufLWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
