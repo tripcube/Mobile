@@ -6,8 +6,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'fcm_controller.dart';
+import 'package:geolocator/geolocator.dart';
+import 'location_controller.dart';
 
 class WebviewMainController extends GetxController {
+  static String fcmToken = "";
 //WebviewMainController 클래스의 인스턴스를 반환
   static WebviewMainController get to => Get.find();
 
@@ -30,9 +34,33 @@ class WebviewMainController extends GetxController {
         },
         onWebResourceError: (WebResourceError error) {},
       ),
+
     )
+    ..addJavaScriptChannel(
+      'Tripcube', // channel 이름
+      onMessageReceived: (JavaScriptMessage message) {
+        print("-----------message-----------\n\n");
+        print(message.message.toString());
+        print("-----------done-----------\n\n");
+        print(fcmToken);
+        fcmController.sendFCMToken(message.message.toString(), fcmToken);
+      },
+    )
+
+    ..addJavaScriptChannel(
+        'GetLocation',
+        onMessageReceived: (JavaScriptMessage message) async{
+          print("--------------------GetLocation------------");
+          Position pos = await locationController.getCurrentLocation();
+          String latitude = pos.latitude.toString();
+          String longitude = pos.longitude.toString();
+          String msg = latitude.toString() + ", " + longitude.toString();
+          WebviewMainController.to.controller.runJavaScript('window.fromApptoWeb("$msg")');
+        }
+    )
+
   //접속한 [URL]을 삽입
-    ..loadRequest(Uri.parse("http://sw.uos.ac.kr/nonlogin"));
+    ..loadRequest(Uri.parse("http://sw.uos.ac.kr/map"));
 
 // 다른 파일에서 controller를 불러오기 위함
   WebViewController getController() {
