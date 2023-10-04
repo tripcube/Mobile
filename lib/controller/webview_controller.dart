@@ -39,10 +39,6 @@ class WebviewMainController extends GetxController {
     ..addJavaScriptChannel(
       'Tripcube', // channel 이름
       onMessageReceived: (JavaScriptMessage message) {
-        print("-----------message-----------\n\n");
-        print(message.message.toString());
-        print("-----------done-----------\n\n");
-        print(fcmToken);
         fcmController.sendFCMToken(message.message.toString(), fcmToken);
       },
     )
@@ -60,7 +56,7 @@ class WebviewMainController extends GetxController {
     )
 
   //접속한 [URL]을 삽입
-    ..loadRequest(Uri.parse("http://sw.uos.ac.kr/map"));
+    ..loadRequest(Uri.parse("http://sw.uos.ac.kr/nonlogin"));
 
 // 다른 파일에서 controller를 불러오기 위함
   WebViewController getController() {
