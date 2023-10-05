@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'util/dialog.dart';
+import 'controller/image_controller.dart';
 
 import 'controller/webview_controller.dart';
 import 'util/fcmSetting.dart';
@@ -25,8 +27,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //WebviewMainController의 controller를 호출
-    late final controller = WebviewMainController.to.getController();
     // SystemChrome.setEnabledSystemUIOverlays([]);
 
     return MaterialApp(
@@ -35,32 +35,44 @@ class MyApp extends StatelessWidget {
             systemOverlayStyle: SystemUiOverlayStyle.dark,
           )
       ),
-      home: WillPopScope(
-        child: Scaffold(
-          appBar: PreferredSize(
-            //앱 바는 필요하지 않았기에 0으로
-              preferredSize: const Size.fromHeight(0),
-              // elevation = 필요하지 않은 그림자 효과
-              child: AppBar(elevation: 0, backgroundColor: Colors.white,)
-          ),
-          //WebViewWidget에 controller를 parameter로 넘겨준다
-          body: WebViewWidget(
-              controller: controller,
-          ),
-        ),
-        onWillPop: () {
-          var future = controller!.canGoBack();
-          future.then((cnaGoBack) {
-            if (cnaGoBack) {
-              controller!.goBack();
-            } else {
-              SystemNavigator.pop();
-            }
-          });
-          return Future.value(false);
-        },
-      ),
+      home: Home(),
     );
 
+  }
+}
+
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    //WebviewMainController의 controller를 호출
+    late final controller = WebviewMainController.to.getController();
+
+    return WillPopScope(
+      child: Scaffold(
+        appBar: PreferredSize(
+          //앱 바는 필요하지 않았기에 0으로
+            preferredSize: const Size.fromHeight(0),
+            // elevation = 필요하지 않은 그림자 효과
+            child: AppBar(elevation: 0, backgroundColor: Colors.white,)
+        ),
+        //WebViewWidget에 controller를 parameter로 넘겨준다
+        body: WebViewWidget(
+          controller: controller,
+        ),
+      ),
+      onWillPop: () {
+        var future = controller!.canGoBack();
+        future.then((cnaGoBack) {
+          if (cnaGoBack) {
+            controller!.goBack();
+          } else {
+            Dialogs.showExitDialog(context);
+          }
+        });
+        return Future.value(false);
+      },
+    );
   }
 }

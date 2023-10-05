@@ -9,6 +9,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'fcm_controller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'location_controller.dart';
+import 'image_controller.dart';
 
 class WebviewMainController extends GetxController {
   static String fcmToken = "";
@@ -40,6 +41,14 @@ class WebviewMainController extends GetxController {
       'Tripcube', // channel 이름
       onMessageReceived: (JavaScriptMessage message) {
         fcmController.sendFCMToken(message.message.toString(), fcmToken);
+      },
+    )
+
+    ..addJavaScriptChannel(
+      'GetImage', // channel 이름
+      onMessageReceived: (JavaScriptMessage message) async{
+        String file = await imageController.getImage();
+        WebviewMainController.to.controller.runJavaScript('window.uploadfile("$file")');
       },
     )
 
