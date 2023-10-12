@@ -48,7 +48,7 @@ class WebviewMainController extends GetxController {
       'GetImage', // channel 이름
       onMessageReceived: (JavaScriptMessage message) async{
         String file = await imageController.getImage();
-        WebviewMainController.to.controller.runJavaScript('window.uploadfile("$file")');
+        WebviewMainController.to.controller.runJavaScript('window.getImage("$file")');
       },
     )
 
@@ -59,8 +59,8 @@ class WebviewMainController extends GetxController {
           Position pos = await locationController.getCurrentLocation();
           String latitude = pos.latitude.toString();
           String longitude = pos.longitude.toString();
-          String msg = latitude.toString() + ", " + longitude.toString();
-          WebviewMainController.to.controller.runJavaScript('window.fromApptoWeb("$msg")');
+          WebviewMainController.to.controller.runJavaScript('window.getLatitude("$latitude")');
+          WebviewMainController.to.controller.runJavaScript('window.getLongitude("$longitude")');
         }
     )
 
